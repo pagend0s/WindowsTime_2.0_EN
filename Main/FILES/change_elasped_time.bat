@@ -144,7 +144,7 @@ wmic UserAccount get Name
 	:SET_HOW_MANY_SUB
 	echo:
 	echo:
-	set /p "time_2_add=HOW MUCH TIME YOU WANT TO SUB: "
+	set /p "time_2_add=HOW MUCH TIME YOU WANT TO SUB (IN MIN): "
 	set /A target_time_after = %line% + %time_2_add%
 	GOTO less_then_0
 	
@@ -154,7 +154,7 @@ wmic UserAccount get Name
 	echo   "ADDITIONAL TIME WILL NOT EXCEED THE DAILY LIMIT. FOR DAILY TIME: %WEEK_TIME% ; AND FOR THE WEEKEND: %WEEKEND_TIME%"
 	echo:
 	echo:
-	set /p "time_2_add=ENTER HOW MUCH TIME YOU WANT TO ADD: "
+	set /p "time_2_add=ENTER HOW MUCH TIME YOU WANT TO ADD (IN MIN): "
 	set /A target_time_after = %line% - %time_2_add%
 	GOTO less_then_0
 	
