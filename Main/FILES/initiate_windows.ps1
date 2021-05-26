@@ -29,11 +29,11 @@ function Start-GCTimeoutDialog {
 
   [Parameter(Mandatory=$false)]
   [String]
-  $Button1Text = "Zaloguj",
+  $Button1Text = "LOGIN",
 
   [Parameter(Mandatory=$false)]
   [String]
-  $Button2Text = "Wyloguj",
+  $Button2Text = "LOG OUT",
 
   [Parameter(Mandatory=$false)]
   [Int]
@@ -159,4 +159,4 @@ function Start-GCTimeoutDialog {
   Write-Verbose -Message "Function completed: $($MyInvocation.MyCommand)"
  
 }
-Start-GCTimeoutDialog -Title "Shutdown" -Message "Podjecie decyzji o zalogowaniu lub wylogowaniu" -Seconds 120
+Start-GCTimeoutDialog -Title "Shutdown" -Message "Make a decision to log in or out." -Seconds 120
