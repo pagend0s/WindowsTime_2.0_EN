@@ -81,7 +81,7 @@ echo(
 echo "IF YOU WANT TO CHANGE THE TIME FOR THE WEEKEND  ---> [type: weekend] . IF FOR A WEEKLY DAY  ---> [type: week] "
 echo(
 echo(
-set /p "DAY=PROVIDE A CORRECT ARGUMENT: weekend --OR-- week "
+set /p "DAY=PROVIDE A CORRECT ARGUMENT: weekend --OR-- week: "
 
 IF %DAY% == %week% set True_day=1
 IF %DAY% == %weekend% set True_day=1
