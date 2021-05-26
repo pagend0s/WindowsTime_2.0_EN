@@ -43,4 +43,4 @@ Function Start-LogoffNotice {
     ElseIf ( 2 -eq $content_number ) {$status = "Warning"}
     ElseIf ( 3 -eq $content_number ) {$status = "Error"}
 
-Start-LogoffNotice -BalloonIcon $status -BalloonText $content_noti -BalloonTitle "Twoj Licznik"
+Start-LogoffNotice -BalloonIcon $status -BalloonText $content_noti -BalloonTitle "YOUR COUNTER"
