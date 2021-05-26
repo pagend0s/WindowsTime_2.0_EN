@@ -102,7 +102,7 @@
 		set operator_2=1
 		echo "Do you want to turn on the time ?  "
 		echo:
-		set /p "time_on_or_not=NAPISZ: [yes] lub [no] : "
+		set /p "time_on_or_not=TYPE: [yes] lub [no] : "
 	
 		IF "%time_on_or_not%" == "yes" Set operator_2=2
 		IF "%time_on_or_not%" == "no" Set operator_2=2
