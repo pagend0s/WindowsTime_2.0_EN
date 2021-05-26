@@ -10,6 +10,6 @@ For i=1 To (iLineNumber-1)
 	objTS.SkipLine
 Next
 
-x=msgbox( objTS.Readline ,0, "TWOJ LICZNIK")
+x=msgbox( objTS.Readline ,0, "YOUR COUNTER")
 
 'WScript.Echo objTS.Readline 
