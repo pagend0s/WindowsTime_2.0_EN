@@ -315,7 +315,7 @@ IF EXIST "C:\Users\%USERNAME%\LOG\watch_dog" (
 	:: JESLI ILOSC LINII W History.txt = 100proc> (PETLA KONCZACA PO RESTARCIE)
 	IF %line% GEQ %atr_time% (
 		::WIADOMOSC
-		echo "NIE MASZ JUZ CZASU, ZOSTAJESZ WYLOGOWANY :DDDD" > C:\WindowsTime\Main\Notify\notify2_vbs_notification
+		echo "YOU HAVE NO TIME ANY MORE, YOU'RE LOGOUT :DDDD" > C:\WindowsTime\Main\Notify\notify2_vbs_notification
 		echo 3 >> C:\WindowsTime\Main\Notify\notify2_vbs_notification
 		start C:\WindowsTime\Main\Notify\startpower.bat
 		timeout 3
@@ -324,20 +324,19 @@ IF EXIST "C:\Users\%USERNAME%\LOG\watch_dog" (
 	:: JESLI ILOSC LINII W History.txt = 95proc (PETLA OSTRZEGAJACA)
 	IF %line% == %atr_time_mini_one%	(
 		:: WIADOMOSC
-		echo "POZOSTALO "%atr_time_mini_one_alert%" MIN" > C:\WindowsTime\Main\Notify\notify2_vbs_notification
+		echo "REMAIN "%atr_time_mini_one_alert%" MIN" > C:\WindowsTime\Main\Notify\notify2_vbs_notification
 		echo 1 >> C:\WindowsTime\Main\Notify\notify2_vbs_notification
 		start C:\WindowsTime\Main\Notify\startpower.bat
-		::msg %user_id% POZOSTALO %atr_time_mini_one_alert% MIN 
+		::msg %user_id% REMAIN %atr_time_mini_one_alert% MIN 
 		GOTO START
 	)
 	:: JESLI ILOSC LINII W History.txt = 98proc (PETLA OSTRZEGAJACA)
 	IF %line% == %atr_time_mini_two% (
 		::WIADOMOSC
-		echo "POZOSTALO "%atr_time_mini_one_alert_second%" MIN" > C:\WindowsTime\Main\Notify\notify2_vbs_notification
+		echo "REMAIN "%atr_time_mini_one_alert_second%" MIN" > C:\WindowsTime\Main\Notify\notify2_vbs_notification
 		echo 2 >> C:\WindowsTime\Main\Notify\notify2_vbs_notification
 		start C:\WindowsTime\Main\Notify\startpower.bat
-	
-		::msg %user_id% POZOSTALY %atr_time_mini_one_alert_second% MIN. LEPIEJ UCIEKAJ :DDD
+
 		GOTO START
 		)
 	::PETLA LICZACA PRZED RESTARTEM 
@@ -467,7 +466,7 @@ IF EXIST "C:\Users\%USERNAME%\LOG\watch_dog" (
 			IF defined True (
 			GOTO WEEK_OR_WEEKEND
 			) else (
-			echo "MANIPULUJESZ PRZY CZASIE !" > C:\WindowsTime\Main\Notify\notify2_vbs_notification
+			echo "YOU MANIPULATE AGAINST TIME !" > C:\WindowsTime\Main\Notify\notify2_vbs_notification
 			start C:\WindowsTime\Main\Notify\notify2.vbs
 			echo %TODAY% > c:\Users\%USERNAME%\LOG\History%base64%
 			echo  %atr_time% >> c:\Users\%USERNAME%\LOG\History%base64%
