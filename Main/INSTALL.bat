@@ -317,7 +317,47 @@ echo:
 	echo "TIME HAS BEEN INSTALLED FOR %user_id% !. CURRENTLY TIME IS SET: Mon-Fri 1 h.. Sa-Su 1,5 h." > C:\WindowsTime\Main\Notify\notify2_vbs_notification
 	start C:\WindowsTime\Main\Notify\notify2.vbs
 	
+	GOTO ADD_TASKMGR_DI
+
+	:ADD_TASKMGR_DI
+
+	SETLOCAL ENABLEDELAYEDEXPANSION
+	SET /A FOUND_VAR=0
+	FOR /F "tokens=* USEBACKQ" %%F IN (`query session`) DO (
+
+		echo %%F|findstr /i /c:"%user_id%" >nul
+		if errorlevel 1 ( echo: ) else ( SET /A FOUND_VAR=1 )
+		)
+	IF %FOUND_VAR% == 1 (
+	GOTO WRITE_REG_WITH_SID
+	)	else	(
+	GOTO WRITE_REG_WITH_HIVE
+	)
+
+	ENDLOCAL
+
+	:WRITE_REG_WITH_SID
+	for /f "delims= " %%a in ('"wmic path win32_useraccount where name='%user_id%' get sid"') do (
+  		if not "%%a"=="SID" (          
+      		set sid_var=%%a
+      		goto write_reg
+   		)   
+	)
+
+	:write_reg
+	echo %sid_var%
+
+	REG.EXE ADD HKEY_USERS\%sid_var%\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+
+	GOTO end
+
+	:WRITE_REG_WITH_HIVE
+
+	reg load HKLM\TempHive C:\Users\%user_id%\ntuser.dat
+
+	REG.EXE ADD HKLM\TempHive\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\	/v DisableTaskmgr /t REG_DWORD /d 1 /f
 	GOTO END
+
 
 :END
 
