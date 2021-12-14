@@ -3,9 +3,9 @@ TITLE TIMECOUNTER
 
 FOR /f  %%d in ('echo %USERNAME% ')  do SET user_id=%%d
 
-TIMEOUT 2
+::TIMEOUT 1
 
-call C:\WindowsTime\Main\Options\show_aktu_time.bat
+::start /min "" C:\WindowsTime\Main\Options\show_aktu_time.bat
 
 SET call_week_or_weekend=1
 ::ZMIENNA Saturday
@@ -83,10 +83,26 @@ IF %sec_sum% == 6 (
 
 	::JESLI PIES WARUJE (TEN SAM DZIEN ) ALBO SPRAWDZENIE CZY 
 	IF exist "c:\Users\%USERNAME%\LOG\watch_dog" (
-		GOTO Allow_dog 
+		GOTO TEST_DOG 
 	)	else	(
 		GOTO READ_LINE_FROM_HISTORY
 	)
+
+:TEST_DOG
+DEL C:\Users\%USERNAME%\LOG\watch_dog >nul 2>&1
+
+IF exist "c:\Users\%USERNAME%\LOG\watch_dog" (
+		GOTO Allow_dog 
+	)	else	(
+		GOTO DOG_MANIPULATE
+	)
+	
+:DOG_MANIPULATE
+			echo "MANIPULATION HAS BEEN NOTICED. YOU ARE LOGOUT ;)" > C:\WindowsTime\Main\Notify\notify2_vbs_notification
+			start C:\WindowsTime\Main\Notify\notify2.vbs
+			timeout 5
+			GOTO SHUTDOWN
+			)
 		
 :Allow_dog
 
@@ -98,7 +114,7 @@ for /F "tokens=1" %%e in ("%date_dog_file%") do SET DAY_IN_DOG=%%e
 IF %TODAY% == %DAY_IN_DOG% (
 	GOTO WATCH_DOG_TIME
 	) else (
-	icacls C:\Users\%USERNAME%\LOG\watch_dog /grant %USERNAME%:(DE)
+	icacls C:\Users\%USERNAME%\LOG\watch_dog /grant %USERNAME%:(F)
 	TIMEOUT 1
 	DEL c:\Users\%USERNAME%\LOG\watch_dog
 	GOTO NEW_DAY
@@ -156,7 +172,10 @@ IF %TODAY% == %DAY_IN_DOG% (
 		for /f "delims=" %%p in ('powershell -Command "Get-Date -format 'dd.MM.yy'"')  do echo %%p > c:\Users\%USERNAME%\LOG\History%base64%
 		echo %TODAY% > c:\Users\%USERNAME%\LOG\watch_dog
 		TIMEOUT 1
-		icacls C:\Users\%USERNAME%\LOG\watch_dog /deny %USERNAME%:(DE)
+		icacls C:\Users\%USERNAME%\LOG\watch_dog /grant %USERNAME%:(F)
+		TIMEOUT 1
+		icacls C:\Users\%USERNAME%\LOG\watch_dog /deny %USERNAME%:(DE,WA)
+		TIMEOUT 1
 		
 		
 		IF NOT %base64% == 0 GOTO HISTORY0
@@ -233,13 +252,13 @@ IF %TODAY% == %DAY_IN_DOG% (
   
 		:atr_time_mini_one_1
 		SETLOCAL EnableDelayedExpansion
-		set /A atr_time_mini_one=!atr_time!*95/100 &REM
+		set /A atr_time_mini_one=!atr_time!*90/100 &REM
 		ENDLOCAL endlocal & set atr_time_mini_one=%atr_time_mini_one%
 		GOTO atr_time_mini_two_1
   
 		:atr_time_mini_two_1
 		SETLOCAL EnableDelayedExpansion
-		set /A atr_time_mini_two=!atr_time!*98/100 &REM
+		set /A atr_time_mini_two=!atr_time!*95/100 &REM
 		ENDLOCAL & set atr_time_mini_two=%atr_time_mini_two%
 		GOTO MAIN_LOOP
   
@@ -250,13 +269,13 @@ IF %TODAY% == %DAY_IN_DOG% (
   
 		:atr_time_mini_one_2
 		SETLOCAL EnableDelayedExpansion
-		set /A atr_time_mini_one=!atr_time!*95/100 &REM
+		set /A atr_time_mini_one=!atr_time!*90/100 &REM
 		ENDLOCAL endlocal & set atr_time_mini_one=%atr_time_mini_one% 
 		GOTO atr_time_mini_two_1
   
 		:atr_time_mini_two_1
 		SETLOCAL EnableDelayedExpansion
-		set /A atr_time_mini_two=!atr_time!*98/100 &REM	
+		set /A atr_time_mini_two=!atr_time!*95/100 &REM	
 		ENDLOCAL & set atr_time_mini_two=%atr_time_mini_two%
   
 		GOTO MAIN_LOOP >nul 2>nul
@@ -265,8 +284,8 @@ IF %TODAY% == %DAY_IN_DOG% (
 		
 :MAIN_LOOP
 ::SETLOCAL EnableDelayedExpansion
-set /A atr_time_mini_one_alert=(%atr_time% - %atr_time_mini_one%) / 60  &REM	
-set /A atr_time_mini_one_alert_second=(%atr_time% - %atr_time_mini_two%) / 60  &REM	
+set /A atr_time_mini_one_alert=(%atr_time% - %atr_time_mini_one%)	&REM	
+set /A atr_time_mini_one_alert_second=(%atr_time% - %atr_time_mini_two%)	&REM	
 
 	
 IF EXIST "C:\Users\%USERNAME%\LOG\watch_dog" (
@@ -287,13 +306,23 @@ IF EXIST "C:\Users\%USERNAME%\LOG\watch_dog" (
 	
 	
 	IF %dog_lines% LSS %line%	(
-		call C:\WindowsTime\Main\dog_recovery.bat
-		GOTO INT_TEST
+		
+		GOTO DOG_RECON
 		) else ( 
 		GOTO INT_TEST
 		)
-	)			
-	ENDLOCAL
+	)
+	::ENDLOCAL
+	:DOG_RECON
+	icacls C:\Users\%user_id%\LOG\watch_dog /grant %user_id%:(F)
+	TIMEOUT 1
+	DEL	c:\Users\%USERNAME%\LOG\watch_dog
+	TIMEOUT 1
+	call C:\WindowsTime\Main\dog_recovery.bat
+	TIMEOUT 1
+	icacls C:\Users\%user_id%\LOG\watch_dog /deny %user_id%:(DE,WA)
+	TIMEOUT 1
+	GOTO INT_TEST
 	
 	:INT_TEST
 	for /f "skip=1 tokens=1" %%g in ("c:\Users\%USERNAME%\LOG\History%base64%") do set line=%%g
@@ -327,7 +356,6 @@ IF EXIST "C:\Users\%USERNAME%\LOG\watch_dog" (
 		echo "REMAIN "%atr_time_mini_one_alert%" MIN" > C:\WindowsTime\Main\Notify\notify2_vbs_notification
 		echo 1 >> C:\WindowsTime\Main\Notify\notify2_vbs_notification
 		start C:\WindowsTime\Main\Notify\startpower.bat
-		::msg %user_id% REMAIN %atr_time_mini_one_alert% MIN 
 		GOTO START
 	)
 	:: JESLI ILOSC LINII W History.txt = 98proc (PETLA OSTRZEGAJACA)
@@ -336,7 +364,6 @@ IF EXIST "C:\Users\%USERNAME%\LOG\watch_dog" (
 		echo "REMAIN "%atr_time_mini_one_alert_second%" MIN" > C:\WindowsTime\Main\Notify\notify2_vbs_notification
 		echo 2 >> C:\WindowsTime\Main\Notify\notify2_vbs_notification
 		start C:\WindowsTime\Main\Notify\startpower.bat
-
 		GOTO START
 		)
 	::PETLA LICZACA PRZED RESTARTEM 
@@ -353,8 +380,9 @@ IF EXIST "C:\Users\%USERNAME%\LOG\watch_dog" (
 	
 	IF NOT EXIST "c:\Users\%USERNAME%\LOG\watch_dog"	(
 		echo %TODAY% > c:\Users\%USERNAME%\LOG\watch_dog
+		TIMEOUT 3
+		icacls C:\Users\%USERNAME%\LOG\watch_dog /deny %USERNAME%:(DE,WA)
 		TIMEOUT 1
-		icacls C:\Users\%USERNAME%\LOG\watch_dog /deny %USERNAME%:(DE)
 		GOTO START_ON
 		) else (
 		GOTO START_ON
@@ -387,8 +415,11 @@ IF EXIST "C:\Users\%USERNAME%\LOG\watch_dog" (
 	GOTO continue
 	
 	:continue
-	
+	icacls C:\Users\%USERNAME%\LOG\watch_dog /grant %USERNAME%:(DE,WA)
+	TIMEOUT 1
 	echo  %c% >>  c:\Users\%USERNAME%\LOG\watch_dog
+	TIMEOUT 1
+	icacls C:\Users\%USERNAME%\LOG\watch_dog /deny %USERNAME%:(DE,WA)
 	
 	IF NOT %base64% == 0 GOTO HISTORY0
 	:HISTORY0
@@ -477,7 +508,8 @@ IF EXIST "C:\Users\%USERNAME%\LOG\watch_dog" (
 :SHUTDOWN
 SETLOCAL EnableDelayedExpansion
 
-icacls C:\Users\%USERNAME%\LOG\watch_dog /grant %USERNAME%:(DE)
+TIMEOUT 3
+icacls C:\Users\%USERNAME%\LOG\watch_dog /grant %USERNAME%:(F)
 TIMEOUT 3
 DEL c:\Users\%USERNAME%\LOG\watch_dog
 
