@@ -197,7 +197,7 @@ wmic UserAccount get Name
 	set /A line=%target_time_after%
 	
 	IF exist C:\Users\%user_id%\LOG\watch_dog	(
-	icacls C:\Users\%user_id%\LOG\watch_dog /grant %user_id%:(DE)
+	icacls C:\Users\%user_id%\LOG\watch_dog /grant %user_id%:(F)
 	TIMEOUT 1
 	DEL	C:\Users\%user_id%\LOG\watch_dog
 	)	else	(
@@ -205,7 +205,9 @@ wmic UserAccount get Name
 	)
 	call C:\WindowsTime\Main\dog_recovery.bat
 	TIMEOUT 2
-	icacls C:\Users\%user_id%\LOG\watch_dog /deny %user_id%:(DE)
+	icacls C:\Users\%user_id%\LOG\watch_dog /grant %user_id%:(F)
+	TIMEOUT 2
+	icacls C:\Users\%user_id%\LOG\watch_dog /deny %user_id%:(DE,WA)
 	
 	GOTO WRITE_HASH
 		:WRITE_HASH
