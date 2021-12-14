@@ -114,9 +114,6 @@ for /F "tokens=1" %%e in ("%date_dog_file%") do SET DAY_IN_DOG=%%e
 IF %TODAY% == %DAY_IN_DOG% (
 	GOTO WATCH_DOG_TIME
 	) else (
-	icacls C:\Users\%USERNAME%\LOG\watch_dog /grant %USERNAME%:(F)
-	TIMEOUT 1
-	DEL c:\Users\%USERNAME%\LOG\watch_dog
 	GOTO NEW_DAY
 	)		
 	
@@ -165,7 +162,10 @@ IF %TODAY% == %DAY_IN_DOG% (
 	GOTO WEEK_OR_WEEKEND
 	
 	:NEW_DAY
-		
+		TIMEOUT 1
+		icacls C:\Users\%USERNAME%\LOG\watch_dog /grant %USERNAME%:(F)
+		TIMEOUT 1
+		DEL c:\Users\%USERNAME%\LOG\watch_dog
 		set /a base64=0
 		set /a base64=%random% %%04
 		
