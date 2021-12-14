@@ -33,7 +33,7 @@ if '%errorlevel%' NEQ '0' (
 	COLOR 17
 	CLS
     echo --------------------------------------
-    echo     	WELCOME TO WindowsTime_2.0  
+    echo     	WELCOME TO WindowsTime_2.1 
     echo --------------------------------------            
     echo CHOOSE AN OPTION NUMBER FROM THE LIST BELOW :
     echo [1]	INSTALL TIME LIMIT 
